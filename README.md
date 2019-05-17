@@ -1,2 +1,2 @@
 # hqc
-AVX512 implementation oh HQC proposal
+AVX512 implementation of HQC proposal
