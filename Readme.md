@@ -1,1 +1,1 @@
-AVX-512 Implementation of HQC
+AVX-512 Implementation of HQC.
