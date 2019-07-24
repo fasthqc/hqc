@@ -1,0 +1,150 @@
+
+Origin, without patch
+
+
+********************
+**** HQC-256-256 ****
+********************
+
+N: 70853   N1: 796   N2: 89   OMEGA: 133   OMEGA_R: 153   Failure rate: 2^-256   Sec: 256 bits
+
+
+secret1: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+secret2: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+
+Chronométrage crypto_kem_keypair(pk, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 672976 et 0.197934ms                           
+
+Chronométrage crypto_kem_enc(ct, key1, pk) !
+
+--------------------------------------------------
+
+meanTimer      : 1355987 et 0.398820ms                           
+
+Chronométrage crypto_kem_dec(key2, ct, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 2284881 et 0.672024ms                           
+
+Au revoir et merci !
+
+PATCH fast convolution
+
+#define PATCH
+diff PQCs
+diff OK
+
+********************
+**** HQC-256-256 ****
+********************
+
+N: 70853   N1: 796   N2: 89   OMEGA: 133   OMEGA_R: 153   Failure rate: 2^-256   Sec: 256 bits
+
+
+secret1: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+secret2: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+
+Chronométrage crypto_kem_keypair(pk, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 432356 et 0.127164ms                           
+
+Chronométrage crypto_kem_enc(ct, key1, pk) !
+
+--------------------------------------------------
+
+meanTimer      : 852402 et 0.250706ms                           
+
+Chronométrage crypto_kem_dec(key2, ct, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 1560887 et 0.459084ms                           
+
+Au revoir et merci !
+
+
+
+PATCH syndrome_gen2
+
+#define PATCH2
+diff PQCs
+diff OK
+
+********************
+**** HQC-256-256 ****
+********************
+
+N: 70853   N1: 796   N2: 89   OMEGA: 133   OMEGA_R: 153   Failure rate: 2^-256   Sec: 256 bits
+sortie syndrom_gen_init()
+
+
+secret1: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+secret2: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+
+Chronométrage crypto_kem_keypair(pk, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 670833 et 0.197304ms                           
+
+Chronométrage crypto_kem_enc(ct, key1, pk) !
+
+--------------------------------------------------
+
+meanTimer      : 1374517 et 0.404270ms                           
+
+Chronométrage crypto_kem_dec(key2, ct, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 2069848 et 0.608779ms                           
+
+Au revoir et merci !
+
+
+
+PATCH cumulation
+
+#define PATCH
+#define PATCH2
+diff PQCs
+diff OK
+
+********************
+**** HQC-256-256 ****
+********************
+
+N: 70853   N1: 796   N2: 89   OMEGA: 133   OMEGA_R: 153   Failure rate: 2^-256   Sec: 256 bits
+sortie syndrom_gen_init()
+
+
+secret1: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+secret2: 801ce67ab35c3f57f2222bfd702e29d66d764bdd1e32ffc4916692da2c6f66f7d2d70e2fab81ef1981f744b354c6bf31b8d652f7a8283fec598863c5070f531
+
+Chronométrage crypto_kem_keypair(pk, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 433829 et 0.127597ms                           
+
+Chronométrage crypto_kem_enc(ct, key1, pk) !
+
+--------------------------------------------------
+
+meanTimer      : 856190 et 0.251821ms                           
+
+Chronométrage crypto_kem_dec(key2, ct, sk) !
+
+--------------------------------------------------
+
+meanTimer      : 1343302 et 0.395089ms                           
+
+Au revoir et merci !
+
+
