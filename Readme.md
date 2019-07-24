@@ -1,1 +1,7 @@
-AVX-512 Implementation of HQC.
+AVX2 Implementation of HQC.
+
+We proposer in this repository a modification of the optimized HQC source code (HQC NIST round 2 submission, 10/04/2019, see Aguilar-Melchioret al.[1]) in order to improve the performances.  This modification deals with the vectorization of two functions:  the sparse-dense polynomial  multiplication and  the  syndromegeneration (syndrome_gen). 
+
+**The speed-up of our patched HQC implementation is about 34 to 46 % in comparison to the current optimized NIST proposal**
+
+*[1]  Carlos Aguilar-Melchior, Nicolas Aragon, Slim Bettaieb, Loïc Bidoux, Olivier Blazy, Jean-Christophe Deneuville,  Philippe Gaborit,  Edoardo Persichetti,  and Gilles Zémor.   Ham-ming Quasi-Cyclic (HQC).  InNIST Post-Quantum Cryptography submissions, round 2. NIST,2019.*
