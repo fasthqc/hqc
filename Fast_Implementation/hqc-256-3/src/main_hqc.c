@@ -5,7 +5,7 @@
 
 #include "patch.h"
 
-
+#define CPU_SPEED 3400000.0
 //#define PATCH2
 #ifdef PATCH2    
   #include "bch.h"
@@ -98,7 +98,7 @@ int main() {
 		fflush(stdout);
 	}
 		
-	printf("\n\nmeanTimer      : %llu et %fms                           \n\n",meanTimer/NSAMPLES, (meanTimer/NSAMPLES)/3400000.0);
+	printf("\n\nmeanTimer      : %llu et %fms                           \n\n",meanTimer/NSAMPLES, (meanTimer/NSAMPLES)/CPU_SPEED);
   
 	
 	printf("Chronométrage crypto_kem_enc(ct, key1, pk) !\n\n");
@@ -128,7 +128,7 @@ int main() {
 		fflush(stdout);
 	}
 		
-	printf("\n\nmeanTimer      : %llu et %fms                           \n\n",meanTimer/NSAMPLES, (meanTimer/NSAMPLES)/3400000.0);
+	printf("\n\nmeanTimer      : %llu et %fms                           \n\n",meanTimer/NSAMPLES, (meanTimer/NSAMPLES)/CPU_SPEED);
   
 	printf("Chronométrage crypto_kem_dec(key2, ct, sk) !\n\n");
 	meanTimer = 0;
@@ -162,7 +162,7 @@ int main() {
 	
 	if(flag) printf("%d aborts !!!!\n", flag);
 		
-	printf("\n\nmeanTimer      : %llu et %fms                           \n\n",meanTimer/NSAMPLES, (meanTimer/NSAMPLES)/3400000.0);
+	printf("\n\nmeanTimer      : %llu et %fms                           \n\n",meanTimer/NSAMPLES, (meanTimer/NSAMPLES)/CPU_SPEED);
   fin:
 	printf("Au revoir et merci !\n");
 
