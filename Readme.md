@@ -7,4 +7,4 @@ Our imrovement is in the *Fast_implementation* folder.
 
 **The speed-up of our patched HQC implementation is about 34 to 46 % in comparison to the current optimized NIST proposal**
 
-*[1]  Carlos Aguilar-Melchior, Nicolas Aragon, Slim Bettaieb, Loïc Bidoux, Olivier Blazy, Jean-Christophe Deneuville,  Philippe Gaborit,  Edoardo Persichetti,  and Gilles Zémor.   Ham-ming Quasi-Cyclic (HQC).  InNIST Post-Quantum Cryptography submissions, round 2. NIST,2019.*
+*[1]  Carlos Aguilar-Melchior, Nicolas Aragon, Slim Bettaieb, Loïc Bidoux, Olivier Blazy, Jean-Christophe Deneuville,  Philippe Gaborit,  Edoardo Persichetti,  and Gilles Zémor.   Hamming Quasi-Cyclic (HQC).  InNIST Post-Quantum Cryptography submissions, round 2. NIST,2019.*
