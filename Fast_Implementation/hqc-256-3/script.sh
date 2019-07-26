@@ -3,7 +3,7 @@
 cd src/
 
 touch patch.h
-touch results.txt
+touch ../results.txt
 
 cd ..
 make hqc-256-3-kat
