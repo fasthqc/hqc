@@ -14,6 +14,10 @@
 
 #include "patch.h"
 
+#ifdef PATCH2
+  #include "bch.h"
+#endif
+
 #define	MAX_MARKER_LEN		50
 #define KAT_SUCCESS          0
 #define KAT_FILE_OPEN_ERROR -1
