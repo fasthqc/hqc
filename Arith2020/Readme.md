@@ -11,7 +11,10 @@ Each subfolder corresponds to one of the experimentation described in the submis
 - TABLE5: comparison between the HQC patched with the gf2x_mul and with our Toom3Mult and Toom3RecMult;
 - TABLE6: comparison with the NIST submitted optimzed implementation and our patched versions with FastConvolution multiplication (with and without randomization)
 
-Warning: to run the experimentations of TABLE1, TABLE2, TABLE3 and TABLE5, you may need to install the gf2x library
+*Warnings:*
+These source codes are designed for compilation and execution on x86-64 platforms, with AVX, AVX2 and PCLMUL extensions.
+
+To run the experimentations of TABLE1, TABLE2, TABLE3 and TABLE5, you may need to install the gf2x library
 
 -> https://gforge.inria.fr/frs/?group_id=1874
 
