@@ -1,5 +1,7 @@
 This folder contains the source code of the implementations experimented in the submission 16 of the Arith 27 conference:
 
+Each subfolder corresponds to one of the experimentation described in the submission.
+
 - TABLE1: comparison between the gf2x_mul and our KaratRecMult;
 - TABLE2:
   - Toom3 : comparison between the gf2x_mul and our Toom3Mult;
