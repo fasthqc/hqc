@@ -1,0 +1,12 @@
+This folder contains the source code of the implementations experimented in the submission 16 of the Arith 27 conference:
+
+- TABLE1: comparison between the gf2x_mul and our KaratRecMult;
+- TABLE2:
+  - Toom3 : comparison between the gf2x_mul and our Toom3Mult;
+  - Toom3Rec : comparison between the gf2x_mul and our Toom3RecMult (1-recursive version);
+- TABLE3: comparison between the gf2x_mul and our Toom3Mult and Toom3RecMult for 47647 and 70853 HQC sizes;
+- TABLE4: comparison between the HQC implemented sparse-dense multiplication and our FastConvolution (with and without randomization);
+- TABLE5: comparison between the HQC patched with the gf2x_mul and with our Toom3Mult and Toom3RecMult;
+- TABLE6: comparison with the NIST submitted optimzed implementation and our patched versions with FastConvolution multiplication (with and without randomization)
+
+
