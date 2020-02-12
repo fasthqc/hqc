@@ -52,24 +52,9 @@ void afficheVect(uint64_t *A, char *var, int size);
 
 /***************************************************************
 
-	Reverses the bits: MSB -> LSB and vice-versa
-
-*/
-
-
-void reverse_u32(uint32_t * A, uint64_t * Out, int s);
-
-
-void reverse_u64(uint64_t * A, uint64_t * Out, int s);
-
-/***************************************************************
-
 	Polynomial Multiplication (in GF2[X])
 
 */
-
-
-
 
 int Toom3Mult(uint64_t * A, uint64_t * B, uint64_t * C);//size est en nombre de mots de 256 bits !!!
 
