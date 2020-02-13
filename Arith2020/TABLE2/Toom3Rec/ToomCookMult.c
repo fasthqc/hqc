@@ -198,7 +198,7 @@ inline static int KaratRecPclmul256(__m256i * A, __m256i * B, __m256i * C, int s
 //	Multiplication TOOM3_5, opérandes vector_u32 (voir hqc) bits
 //  evaluation en 0,1,x,x+1,\infty (inspiré de Bodrato et Zimmermann (ntl))
 //	interpolation utilisant :
-//  	division par x par shift à droite d'un mot (256 bits, x = X^256)
+//  	division par x par shift à droite d'un mot (64 bits, x = X^64)
 //  	division par x+1 par algo type Quercia
 //  puis multiplications KARATSUBA récursive 16384 (*5, ou 8192 ou 4096)
 //  multiplication élémentaire 256 bits avec PCLMULQDQ intrinsic
@@ -437,12 +437,25 @@ int Toom3Mult(uint64_t* A, uint64_t* B, uint64_t* Out)
 
 
 
+/*************************************************************************************
+//
+//                       MULTIPLICATION
+//
+//	Multiplication TOOM3_5 1-récursive, 
+//  evaluation en 0,1,x,x+1,\infty (inspiré de Bodrato et Zimmermann (ntl))
+//	interpolation utilisant :
+//  	division par x par shift à droite d'un mot (256 bits, x = X^256)
+//  	division par x+1 par algo type Quercia
+//  puis multiplications Toom3Mult  2688, 5760, 11904, 24192, 48768.
+//                   SANS REDUCTION
+//
+*************************************************************************************/
+
+
 
 
 
 static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !!! N = 
-
-	//__m256i tmp[T2_3W_256+1];
 	
 	out[0] = in[0];
 	
@@ -463,9 +476,6 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
  int Toom3RecMult(uint64_t* A, uint64_t* B, uint64_t* Out)//size est en nombre de mots de 256 bits !!!
 {
 
-
-
-	//__m256i *A256 = (__m256i *)A, *B256 = (__m256i *)B,*C = (__m256i *)Out,tmp;
 	
 	__m256i U0[T_TM3R_3W_256+2], V0[T_TM3R_3W_256+2], U1[T_TM3R_3W_256+2], V1[T_TM3R_3W_256+2], U2[T_TM3R_3W_256+2], V2[T_TM3R_3W_256+2];
 	
@@ -475,9 +485,6 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	__m256i ro256[tTM3R/2];
 	
 	const __m256i zero = (__m256i){0ul,0ul,0ul,0ul};
-	
-	/*afficheVect(A,"nA3 ",tTM3R);
-	afficheVect(B,"nB3 ",tTM3R);*/
 	
 	int T2 = T_TM3R_3W_64<<1;
 	
@@ -501,15 +508,7 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 		U2[i]= zero;
 		V2[i]= zero;
 	}
-	
-	/*afficheVect((uint64_t*)U0,"U0 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)U1,"U1 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)U2,"U2 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)V0,"V0 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)V1,"V1 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)V2,"V2 ",T_TM3R_3W_64+8);
-	
-	//getchar();	*/
+
 	
 	/*printf("\nEVALUATION !!!!!!!!\n");	//*/
 	
@@ -520,7 +519,6 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	
 	//W3 = U2 + U1 + U0 ; W2 = V2 + V1 + V0
 
-	/*printf("\nW3 = U2 + U1 + U0 ; W2 = V2 + V1 + V0 !!!!!!!!\n");	//*/
 
 	for(int i=0;i<T_TM3R_3W_256;i++)
 	{
@@ -533,19 +531,12 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 		W2[i]= zero;
 		W3[i]= zero;
 	}
-	
-	
-	/*afficheVect((uint64_t*)W2,"W2 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)W3,"W3 ",T_TM3R_3W_64+8);//*/
+
 	
 	//W1 = W2 * W3
 	Toom3Mult((uint64_t *) W2,(uint64_t *) W3,(uint64_t *) W1);
 	
-	/*afficheVect((uint64_t*)W1,"W1 ",2*(T_TM3R_3W_64+8));
-	getchar();//*/	
-	
 	//W0 =(U1 + U2*x)*x ; W4 =(V1 + V2*x)*x (SIZE = T_TM3_3W_256 + 2 !)
-	/*printf("W0 =(U1 + U2*x)*x ; W4 =(V1 + V2*x)*x !!!!!!!!\n");	//*/
 	W0[0] = zero;
 	W4[0] = zero;
 	
@@ -554,7 +545,6 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	
 	for(int i=1;i<T_TM3R_3W_256+1;i++)
 	{
-		//printf("i = %d\n",i);
 		W0[i+1]=U1[i]^U2[i-1];
 		W4[i+1]=V1[i]^V2[i-1];
 	}
@@ -562,35 +552,19 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	W0[T_TM3R_3W_256+1] = U2[T_TM3R_3W_256-1];
 	W4[T_TM3R_3W_256+1] = V2[T_TM3R_3W_256-1];
 	
-	/*afficheVect((uint64_t*)W0,"W0 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)W4,"W4 ",T_TM3R_3W_64+8);
-	getchar();
-	
-	afficheVect((uint64_t*)W2,"W2 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)W3,"W3 ",T_TM3R_3W_64+8);//*/
-	
 	//W3 = W3 + W0      ; W2 = W2 + W4
-	/*printf("W3 = W3 + W0      ; W2 = W2 + W4 !!!!!!!!\n");	//*/
 	for(int i=0;i<T_TM3R_3W_256+2;i++)
 	{
 		W3[i] ^= W0[i];
 		W2[i] ^= W4[i];
 	}
-	/*afficheVect((uint64_t*)W2,"W2 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)W3,"W3 ",T_TM3R_3W_64+8);//*/
-	
 
 	//W0 = W0 + U0      ; W4 = W4 + V0
-	/*printf("\nW0 = W0 + U0      ; W4 = W4 + V0 !!!!!!!!\n");	//*/
 	for(int i=0;i<T_TM3R_3W_256+2;i++)
 	{
 		W0[i] ^= U0[i];
 		W4[i] ^= V0[i];
 	}
-	
-	/*afficheVect((uint64_t*)W0,"W0 ",T_TM3R_3W_64+8);
-	afficheVect((uint64_t*)W4,"W4 ",T_TM3R_3W_64+8);
-	getchar();//*/
 
 	//W3 = W3 * W2      ; W2 = W0 * W4
 	Toom3Mult((uint64_t *) W3,(uint64_t *) W2,(uint64_t *) tmp);
@@ -603,19 +577,6 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	Toom3Mult((uint64_t *) U0,(uint64_t *) V0,(uint64_t *) W0);
 
 
-	/*printf("\nEVALUATION !!!!!!!!\n");	
-	afficheVect((uint64_t*)W0,"W0 ",2*(T_TM3R_3W_64+8));
-	afficheVect((uint64_t*)W1,"W1 ",2*(T_TM3R_3W_64+8));
-	afficheVect((uint64_t*)W2,"W2 ",2*(T_TM3R_3W_64+8));
-	afficheVect((uint64_t*)W3,"W3 ",2*(T_TM3R_3W_64+8));
-	afficheVect((uint64_t*)W4,"W4 ",2*(T_TM3R_3W_64+8));
-	
-	getchar();
-	
-	
-	
-	
-	printf("\nINTERPOLATION !!!!!!!!\n");	//*/
 	
 	
 	
@@ -625,39 +586,20 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	//W3 = W3 + W2
 	for(int i=0;i<2*(T_TM3R_3W_256+2);i++)
 		W3[i] ^= W2[i];
-		
-	//afficheVect((uint64_t*)W3,"W3 ",2*T_3W/WORD);
-	
-	//afficheVect((uint64_t*)W2,"W2 ",2*T_3W/WORD);
 	
 	//W1 = W1 + W0
 	for(int i=0;i<2*(T_TM3R_3W_256);i++)
 		W1[i] ^= W0[i];
 		
-		
-		
-
-	/*afficheVect((uint64_t*)W3,"W3 ",8*(T_TM3R_3W_256+2));
-	afficheVect((uint64_t*)W1,"W1 ",8*(T_TM3R_3W_256+2));
-	getchar();//*/
 	
 	//W2 =(W2 + W0)/x
-	/*printf("\nW2 =(W2 + W0)/x !!!!!!!!\n");	
-	
-	afficheVect((uint64_t*)W2,"W2 ",8*(T_TM3R_3W_256+2));
-	afficheVect((uint64_t*)W0,"W0 ",8*(T_TM3R_3W_256+2));//*/
 	for(int i=0;i<2*(T_TM3R_3W_256+2)-1;i++)
 		{int i1 = i+1; W2[i] = W2[i1]^W0[i1];};
 	W2[2*(T_TM3R_3W_256+2)-1] = zero;
 	
-	
-	/*afficheVect((uint64_t*)W2,"W2 ",8*(T_TM3R_3W_256+2));
-	getchar();//*/
-	
 
 	//W2 =(W2 + W3 + W4*(x^3+1))/(x+1)
 	
-	/*printf("\nW2 =(W2 + W3 + W4*(x^3+1))/(x+1) !!!!!!!!\n");//*/	
 	for(int i=0;i<2*(T_TM3R_3W_256+2);i++)
 		tmp[i] = W2[i]^W3[i]^W4[i];
 		
@@ -665,38 +607,20 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	tmp[2*(T_TM3R_3W_256+2)+1] = zero;
 	tmp[2*(T_TM3R_3W_256+2)+2] = zero;
 	
-	/*afficheVect((uint64_t*)W2,"W2 ",8*(T_TM3R_3W_256+2));
-	afficheVect((uint64_t*)W3,"W3 ",8*(T_TM3R_3W_256+2));
-	afficheVect((uint64_t*)W4,"W4 ",8*(T_TM3R_3W_256+2));
-	afficheVect((uint64_t*)tmp,"tmp",8*(T_TM3R_3W_256+2)+12);
-	getchar();//*/
-	
 	for(int i=0;i<2*(T_TM3R_3W_256);i++)
 		tmp[i+3] ^=W4[i];
-	//afficheVect((uint64_t*)tmp,"tmp",8*(T_TM3R_3W_256+2)+12);
 	divByXplus1_256(tmp,W2,T_TM3R_3W_256);
-	
-	/*afficheVect((uint64_t*)W2,"W2 ",8*(T_TM3R_3W_256+2));
-	getchar();//*/
 	
 	//W3 =(W3 + W1)/(x*(x+1))
 	
-	
-	/*printf("\nW3 =(W3 + W1)/(x*(x+1)) !!!!!!!!\n");	
-	
-	afficheVect((uint64_t*)W3,"W3 ",8*(T_TM3R_3W_256+2));
-	afficheVect((uint64_t*)W1,"W1 ",8*(T_TM3R_3W_256+2));//*/
 	
 	for(int i=0;i<2*(T_TM3R_3W_256+2)-1;i++)
 		{int i1 = i+1; tmp[i] = W3[i1]^W1[i1];};
 		
 	
 	tmp[2*(T_TM3R_3W_256+2)-1] = (__m256i){0ul,0ul,0ul,0ul};
-	//afficheVect((uint64_t*)tmp,"tmp",8*(T_TM3R_3W_256+2)+12);
 	
 	divByXplus1_256(tmp,W3,T_TM3R_3W_256);
-	
-	//afficheVect((uint64_t*)tmp,"tmp",8*(T_TM3R_3W_256+2)+12);
 	
 	//W1 = W1 + W4 + W2
 	for(int i=0;i<2*(T_TM3R_3W_256+2);i++)
@@ -711,40 +635,6 @@ static inline int divByXplus1_256(__m256i* in,__m256i* out,int size){//mod X^N !
 	// Recomposition
 	//W  = W0+ W1*x+ W2*x^2+ W3*x^3 + W4*x^4
 	//Attention : W0, W1, W4 of size 2*T_TM3_3W_256, W2 and W3 of size 2*(T_TM3_3W_256+2)
-
-
-	
-	/*for(int i=0;i<T_TM3_3W_256;i++)
-	{
-		ro256[i]=W0[i];
-		ro256[i+T_TM3R_3W_256] = W0[i+T_TM3R_3W_256]^W1[i];
-		ro256[i+2*T_TM3R_3W_256] = W1[i+T_TM3R_3W_256]^W2[i];
-		ro256[i+3*T_TM3R_3W_256] = W2[i+T_TM3R_3W_256]^W3[i];
-		ro256[i+4*T_TM3R_3W_256] = W3[i+T_TM3R_3W_256]^W4[i];
-		ro256[i+5*T_TM3R_3W_256] = W4[i+T_TM3R_3W_256];
-	}
-	for(int i=0;i<T_TM3R_3W_256;i++)
-	{
-		ro256[i]=W0[i];
-		int iT = i+T_TM3R_3W_256;
-		ro256[iT] = W0[iT]^W1[i];
-		ro256[i+2*T_TM3R_3W_256] = W1[iT]^W2[i];
-		ro256[i+3*T_TM3R_3W_256] = W2[iT]^W3[i];
-		ro256[i+4*T_TM3R_3W_256] = W3[iT]^W4[i];
-		ro256[i+5*T_TM3R_3W_256] = W4[iT];
-	}
-	
-	ro256[4*T_TM3R_3W_256] ^= W2[2*T_TM3R_3W_256];
-	ro256[5*T_TM3R_3W_256] ^= W3[2*T_TM3R_3W_256];
-	
-	ro256[1+4*T_TM3R_3W_256] ^= W2[1+2*T_TM3R_3W_256];
-	ro256[1+5*T_TM3R_3W_256] ^= W3[1+2*T_TM3R_3W_256];
-	
-	ro256[2+4*T_TM3R_3W_256] ^= W2[2+2*T_TM3R_3W_256];
-	ro256[2+5*T_TM3R_3W_256] ^= W3[2+2*T_TM3R_3W_256];
-	
-	ro256[3+4*T_TM3R_3W_256] ^= W2[3+3*T_TM3R_3W_256];
-	ro256[3+5*T_TM3R_3W_256] ^= W3[3+3*T_TM3R_3W_256];*/
 
 
 	for(int i=0;i<T_TM3R_3W_256;i++)

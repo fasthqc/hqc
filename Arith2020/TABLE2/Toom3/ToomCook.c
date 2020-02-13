@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
 
 	int flag=0, counter=0;
 
-	static unsigned long int nA[t], nB[t], res[t<<1], resMul[t<<1], tmp[t<<1];
+	static unsigned long int nA[SIZE_N_64], nB[SIZE_N_64], res[SIZE_N_64<<1], resMul[SIZE_N_64<<1], tmp[SIZE_N_64<<1];
 	uint64_t mini = (uint64_t)-1L, mini1 = (uint64_t)-1L;
  
 	unsigned long long int timer=0, timer1=0;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
 	srand(time(NULL));
 
 
-	for(int j=0; j<t-2;j++){
+	for(int j=0; j<t;j++){
 		nA[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 		nB[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 	}
@@ -74,20 +74,20 @@ int main(int argc, char* argv[]){
 	Toom3Mult(nA,nB,resMul);
 	gf2x_mul(res,nA,t,nB,t);
 		
-	afficheVect(res,"res",t<<1);
+	afficheVect(res,"res",SIZE_N_64<<1);
 		
 	printf("\nComparaison avec ToomCookMult :\n-----------------------------\n");
 	
-	afficheVect(resMul,"resMul",t<<1);
+	afficheVect(resMul,"resMul",SIZE_N_64<<1);
 	
-	for(int i=0; i<t<<1;i++) tmp[i] = res[i]^resMul[i];
-	
-	printf("\n");
-	afficheVect(tmp,"cmp",t<<1);
+	for(int i=0; i<SIZE_N_64<<1;i++) tmp[i] = res[i]^resMul[i];
 	
 	printf("\n");
+	afficheVect(tmp,"cmp",SIZE_N_64<<1);
 	
-	for(int i=0; i<t<<1;i++)
+	printf("\n");
+	
+	for(int i=0; i<SIZE_N_64<<1;i++)
 		if(res[i]^resMul[i]) flag++;
 
 	printf("flag = %d ; ",flag);
@@ -119,7 +119,7 @@ int main(int argc, char* argv[]){
 	{
 
 
-		for(int j=0; j<t-2;j++){
+		for(int j=0; j<t;j++){
 			nA[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 			nB[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 		}
@@ -128,7 +128,7 @@ int main(int argc, char* argv[]){
 		gf2x_mul(res,nA,t,nB,t);
 		Toom3Mult(nA,nB,resMul);
 		
-		for(int i=0; i<t<<1;i++)
+		for(int i=0; i<SIZE_N_64<<1;i++)
 			if(res[i]^resMul[i]) flag++;
 		flag?counter++,flag=0:counter,flag=0;
 	
@@ -164,7 +164,7 @@ int main(int argc, char* argv[]){
 	
 		mini = (uint64_t)-1L, mini1 = (uint64_t)-1L;
 
-		for(int j=0; j<t-2;j++){
+		for(int j=0; j<t;j++){
 			nA[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 			nB[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 		}
@@ -179,7 +179,7 @@ int main(int argc, char* argv[]){
 		{
 			
 			STAMP(START)
-			gf2x_mul(res,nA,t-2,nB,t-2);
+			gf2x_mul(res,nA,t,nB,t);
 			STAMP(STOP)
 
 

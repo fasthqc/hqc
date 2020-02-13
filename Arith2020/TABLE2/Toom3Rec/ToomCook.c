@@ -44,50 +44,50 @@ int main(int argc, char* argv[]){
 
 	int flag=0, counter=0;
 
-	static unsigned long int nA[t], nB[t], res[t<<1], resMul[t<<1], tmp[t<<1];
+	static unsigned long int nA[tTM3R], nB[tTM3R], res[tTM3R<<1], resMul[tTM3R<<1], tmp[tTM3R<<1];
 	uint64_t mini = (uint64_t)-1L, mini1 = (uint64_t)-1L;
  
 	unsigned long long int timer=0, timer1=0;
 	
 	
 	
-	printf("PARAM_N = %d, t = %d, t/(256/WORD) =%d\n",PARAM_N,t,t/(256/WORD));
+	printf("PARAM_N = %d, tTM3R = %d, tTM3R/(256/WORD) =%d\n",PARAM_N,tTM3R,tTM3R/(256/WORD));
 	printf("%d\n",((PARAM_N/WORD) + (PARAM_N%WORD == 0 ? 0 : 1)));
 	srand(time(NULL));
 
 
-	for(int j=0; j<t-2;j++){
+	for(int j=0; j<t;j++){
 		nA[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 		nB[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 	}
 		
 
 	
-	afficheVect(nA,"nA",t);
-	afficheVect(nB,"nB",t);
+	afficheVect(nA,"nA",tTM3R);
+	afficheVect(nB,"nB",tTM3R);
 
 
 	/***********************************************/
 	printf("\ngf2x_mul :\n----------\n");
 	
 	
-	Toom3Mult(nA,nB,resMul);
+	Toom3RecMult(nA,nB,resMul);
 	gf2x_mul(res,nA,t,nB,t);
 		
-	afficheVect(res,"res",t<<1);
+	afficheVect(res,"res",tTM3R<<1);
 		
 	printf("\nComparaison avec ToomCookMult :\n-----------------------------\n");
 	
-	afficheVect(resMul,"resMul",t<<1);
+	afficheVect(resMul,"resMul",tTM3R<<1);
 	
-	for(int i=0; i<t<<1;i++) tmp[i] = res[i]^resMul[i];
-	
-	printf("\n");
-	afficheVect(tmp,"cmp",t<<1);
+	for(int i=0; i<tTM3R<<1;i++) tmp[i] = res[i]^resMul[i];
 	
 	printf("\n");
+	afficheVect(tmp,"cmp",tTM3R<<1);
 	
-	for(int i=0; i<t<<1;i++)
+	printf("\n");
+	
+	for(int i=0; i<tTM3R<<1;i++)
 		if(res[i]^resMul[i]) flag++;
 
 	printf("flag = %d ; ",flag);
@@ -119,16 +119,16 @@ int main(int argc, char* argv[]){
 	{
 
 
-		for(int j=0; j<t-2;j++){
+		for(int j=0; j<t;j++){
 			nA[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 			nB[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 		}
 		
 
 		gf2x_mul(res,nA,t,nB,t);
-		Toom3Mult(nA,nB,resMul);
+		Toom3RecMult(nA,nB,resMul);
 		
-		for(int i=0; i<t<<1;i++)
+		for(int i=0; i<tTM3R<<1;i++)
 			if(res[i]^resMul[i]) flag++;
 		flag?counter++,flag=0:counter,flag=0;
 	
@@ -152,10 +152,6 @@ int main(int argc, char* argv[]){
 	
 	printf("\t\tPARAM_N = %d\n\t\t Size =%d bits\n\n",PARAM_N,SIZE_N);
 	
-
-	printf("t = %d, t/(256/WORD) =%d, \n",t,t/(256/WORD));
-
-	
 	printf("\ngf2x_mul vs ToomCookMult\n");
 	printf("-------------------------\n");
 
@@ -164,7 +160,7 @@ int main(int argc, char* argv[]){
 	
 		mini = (uint64_t)-1L, mini1 = (uint64_t)-1L;
 
-		for(int j=0; j<t-2;j++){
+		for(int j=0; j<t;j++){
 			nA[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 			nB[j] = (((unsigned long int)(rand()+rand())<<32)^(rand()+rand()));
 		}
@@ -179,12 +175,12 @@ int main(int argc, char* argv[]){
 		{
 			
 			STAMP(START)
-			gf2x_mul(res,nA,t-2,nB,t-2);
+			gf2x_mul(res,nA,t,nB,t);
 			STAMP(STOP)
 
 
 			STAMP(START1)
-			Toom3Mult(nA,nB,resMul);
+			Toom3RecMult(nA,nB,resMul);
 			STAMP(STOP1)
 			
 			if(mini>STOP-START) mini = STOP-START;

@@ -3,7 +3,7 @@ OPTIONS= -O3 -mavx2 -mpclmul -std=c99 -lm -lgf2x
 ifdef SIZE
         MACROS= -DPARAM_N=$(SIZE)
 else      
-        MACROS= -DPARAM_N=48768  
+        MACROS= -DPARAM_N=34176  
 endif
 
 
@@ -19,17 +19,15 @@ ToomCook.o : fonctions.o
 	gcc -c ToomCook.c $(OPTIONS)
 
 test:
-	make -B SIZE=2688
+	make -B SIZE=6528
 	./ToomCook
-	make -B SIZE=5760
+	make -B SIZE=15744
 	./ToomCook
-	make -B SIZE=11904
+	make -B SIZE=34176
 	./ToomCook
-	make -B SIZE=24192
+	make -B SIZE=71040
 	./ToomCook
-	make -B SIZE=48768
-	./ToomCook
-	make -B SIZE=97920
+	make -B SIZE=144768
 	./ToomCook
 	
 all : ToomCook

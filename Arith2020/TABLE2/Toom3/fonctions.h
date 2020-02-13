@@ -27,7 +27,9 @@
 #define WORD 64
 
 #define SIZE_N (256*CEIL_DIVIDE(PARAM_N, 256))
-#define t (SIZE_N/WORD)
+#define SIZE_N_64 (SIZE_N /WORD)
+
+#define t (PARAM_N/WORD)
 
 
 
