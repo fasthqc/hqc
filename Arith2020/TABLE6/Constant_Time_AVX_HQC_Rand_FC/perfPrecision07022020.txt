@@ -1,0 +1,43 @@
+CONSTANT-TIME AVX Randomized Fast Convolution
+
++ ./bin/hqc-128-1
+
+Keygen: 145087 CPU cycles
+Encaps: 292267 CPU cycles
+Decaps: 509035 CPU cycles
+
+
++ ./bin/hqc-192-1
+
+Keygen: 271249 CPU cycles
+Encaps: 520406 CPU cycles
+Decaps: 828758 CPU cycles
+
+
++ ./bin/hqc-192-2
+
+Keygen: 288656 CPU cycles
+Encaps: 542770 CPU cycles
+Decaps: 861063 CPU cycles
+
+
++ ./bin/hqc-256-1
+
+Keygen: 410362 CPU cycles
+Encaps: 784977 CPU cycles
+Decaps: 1226572 CPU cycles
+
+
++ ./bin/hqc-256-2
+
+Keygen: 430795 CPU cycles
+Encaps: 825341 CPU cycles
+Decaps: 1299951 CPU cycles
+
+
++ ./bin/hqc-256-3
+
+Keygen: 450202 CPU cycles
+Encaps: 857490 CPU cycles
+Decaps: 1329798 CPU cycles
+
