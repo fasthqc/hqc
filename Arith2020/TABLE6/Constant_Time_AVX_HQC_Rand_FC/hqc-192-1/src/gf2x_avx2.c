@@ -6,7 +6,7 @@
 #include "gf2x_avx2.h"
 
 
-#define MASK 0x1fUL
+#define MASK 0x1fffffUL
 
 	//PARAM_N 24677 : mask = 0x1fffffffffUL;
 	//PARAM_N 43669 : mask = 0x1fffffUL;
@@ -77,18 +77,7 @@ static inline int reduction256(uint64_t * A, uint64_t * B)
 	
 	
 	//PARAM_N 43699 - 47647
-	/*r256 = (__m256i){A[i],A[i+1],A[i+2],0x0UL};
-	r256 = _mm256_srli_epi64(r256,dec64);
-	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));
-	carry256 = _mm256_slli_epi64(carry256,d0);
-	r256 ^= carry256;
-	i2 = (i-i64)>>2;
-	B256[i2] = (A256[i2]^r256);
-	TT[LAST64] &= MASK;*/
-	
-	
-	//PARAM_N 70853
-	r256 = _mm256_lddqu_si256((__m256i const *)(& A[i]));
+	r256 = (__m256i){A[i],A[i+1],A[i+2],0x0UL};
 	r256 = _mm256_srli_epi64(r256,dec64);
 	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));
 	carry256 = _mm256_slli_epi64(carry256,d0);
@@ -96,6 +85,17 @@ static inline int reduction256(uint64_t * A, uint64_t * B)
 	i2 = (i-i64)>>2;
 	B256[i2] = (A256[i2]^r256);
 	TT[LAST64] &= MASK;
+	
+	
+	//PARAM_N 70853
+	/*r256 = _mm256_lddqu_si256((__m256i const *)(& A[i]));
+	r256 = _mm256_srli_epi64(r256,dec64);
+	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));
+	carry256 = _mm256_slli_epi64(carry256,d0);
+	r256 ^= carry256;
+	i2 = (i-i64)>>2;
+	B256[i2] = (A256[i2]^r256);
+	TT[LAST64] &= MASK;*/
 
 	memcpy(B, TT, VEC_N_SIZE_BYTES);
 
@@ -113,6 +113,7 @@ static inline int reduction256(uint64_t * A, uint64_t * B)
 //  256 bits
 //
 *************************************************************************************/
+
 
 /*
 	procédure d'échange dans un tableau entre deux éléments, pour P_omega
@@ -140,9 +141,12 @@ int fastConvolutionMult(uint64_t * A, uint32_t * vB, uint64_t * C, int W)//size 
 	
 	int P_omega[W];
 
+	//int size256 = size>>2;
+	//int rsize = (size<<1)&0x3,i64;
 	
 	for(int i=0;i<W;i++) P_omega[i]=i;
 	
+	//for(int i=0;i<w;i++) swap(P_omega,0,rand()%PARAM_OMEGA);
 	for(int i=0;i<W-1;i++) swap(P_omega+i,0,rand()%(W-i));
 	
 	
@@ -212,5 +216,7 @@ int fastConvolutionMult(uint64_t * A, uint32_t * vB, uint64_t * C, int W)//size 
 	return 0;
 
 }
+
+
 
 
