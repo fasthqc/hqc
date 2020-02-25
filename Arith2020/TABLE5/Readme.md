@@ -10,6 +10,6 @@ To launch the experimentations, please type:
     $ cd hqc-192-2/
     $ make hqc-192-2
     $ bin/./hqc-192-2
-    cd ../hqc-256-3/
+    $ cd ../hqc-256-3/
     $ make hqc-256-3
     $ bin/./hqc-256-3
