@@ -39,17 +39,17 @@ static inline int reduction256(uint64_t * A, uint64_t * B)
 	__m256i * B256 = (__m256i *) TT;
 
 	
-	const int dec64 = PARAM_N&0x3f, i64=PARAM_N>>6, d0=WORD-dec64;//, mask = (__m256i);
+	const int dec64 = PARAM_N&0x3f, i64=PARAM_N>>6, d0=WORD-dec64;
 
 		int i,i2;
 	
 	for(i=i64;i<(PARAM_N>>5)-4;i+=4)
 	{
 		
-		r256 = _mm256_lddqu_si256((__m256i const *)(& A[i]));// JMR improved Oleg's line
+		r256 = _mm256_lddqu_si256((__m256i const *)(& A[i]));
 		
 		r256 = _mm256_srli_epi64(r256,dec64);
-		carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));// JMR improved Oleg's line
+		carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));
 		carry256 = _mm256_slli_epi64(carry256,d0);
 		r256 ^= carry256;
 		i2 =(i-i64)>>2;
@@ -66,7 +66,7 @@ static inline int reduction256(uint64_t * A, uint64_t * B)
 	
 	//PARAM_N  24677 - 63587 - 67699
 	/*r256 = (__m256i){A[i],A[i+1],0x0UL,0x0UL};
-	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));// JMR improved Oleg's line
+	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));
 	r256 = _mm256_srli_epi64(r256,dec64);
 	carry256 = _mm256_slli_epi64(carry256,d0);
 	r256 ^= carry256;
@@ -79,7 +79,7 @@ static inline int reduction256(uint64_t * A, uint64_t * B)
 	//PARAM_N 43699 - 47647
 	r256 = (__m256i){A[i],A[i+1],A[i+2],0x0UL};
 	r256 = _mm256_srli_epi64(r256,dec64);
-	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));// JMR improved Oleg's line
+	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));
 	carry256 = _mm256_slli_epi64(carry256,d0);
 	r256 ^= carry256;
 	i2 = (i-i64)>>2;
@@ -90,7 +90,7 @@ static inline int reduction256(uint64_t * A, uint64_t * B)
 	//PARAM_N 70853
 	/*r256 = _mm256_lddqu_si256((__m256i const *)(& A[i]));
 	r256 = _mm256_srli_epi64(r256,dec64);
-	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));// JMR improved Oleg's line
+	carry256 = _mm256_lddqu_si256((__m256i const *)(& A[i+1]));
 	carry256 = _mm256_slli_epi64(carry256,d0);
 	r256 ^= carry256;
 	i2 = (i-i64)>>2;
@@ -141,12 +141,9 @@ int fastConvolutionMult(uint64_t * A, uint32_t * vB, uint64_t * C, int W)//size 
 	
 	int P_omega[W];
 
-	//int size256 = size>>2;
-	//int rsize = (size<<1)&0x3,i64;
 	
 	for(int i=0;i<W;i++) P_omega[i]=i;
 	
-	//for(int i=0;i<w;i++) swap(P_omega,0,rand()%PARAM_OMEGA);
 	for(int i=0;i<W-1;i++) swap(P_omega+i,0,rand()%(W-i));
 	
 	
@@ -188,9 +185,9 @@ int fastConvolutionMult(uint64_t * A, uint32_t * vB, uint64_t * C, int W)//size 
 		for(int j=1;j<SIZE256;j++)
 		{
 			int k = (j<<2)-i64;
-			A256 = _mm256_lddqu_si256((__m256i const *)(& A[k]));// JMR improved Oleg's line
+			A256 = _mm256_lddqu_si256((__m256i const *)(& A[k]));
 			A256 = _mm256_slli_epi64(A256,dec64);
-			carry256 = _mm256_lddqu_si256((__m256i const *)(& A[--k]));// JMR improved Oleg's line
+			carry256 = _mm256_lddqu_si256((__m256i const *)(& A[--k]));
 			carry256 = _mm256_srli_epi64(carry256,d0);
 			A256^=carry256;
 			C256[j+vbi] ^= A256;
