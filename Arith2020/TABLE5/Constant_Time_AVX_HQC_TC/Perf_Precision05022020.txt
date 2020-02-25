@@ -1,0 +1,21 @@
+
+Constant_Time_AVX_HQC_TC
+
+Implantation avec multiplication Toom-Cook maison
+
+Precision 3520, 05/02/2020
+
+
+./hqc-192-2 
+
+Keygen: 452853 CPU cycles
+Encaps: 864708 CPU cycles
+Decaps: 1457867 CPU cycles
+
+
+./hqc-256-3
+
+Keygen: 703081 CPU cycles
+Encaps: 1328278 CPU cycles
+Decaps: 2074251 CPU cycles
+
