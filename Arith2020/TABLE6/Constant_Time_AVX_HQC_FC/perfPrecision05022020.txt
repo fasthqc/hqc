@@ -1,0 +1,47 @@
+Constant_Time_AVX_HQC_FC
+
+FC multiplication patch
+
++ ./bin/hqc-128-1
+
+Keygen: 142831 CPU cycles
+Encaps: 285290 CPU cycles
+Decaps: 499715 CPU cycles
+
++ ./bin/hqc-192-1
+
+Keygen: 264170 CPU cycles
+Encaps: 510160 CPU cycles
+Decaps: 816313 CPU cycles
+
++ ./bin/hqc-192-2
+
+Keygen: 279791 CPU cycles
+Encaps: 534681 CPU cycles
+Decaps: 855307 CPU cycles
+
++ ./bin/hqc-256-1
+
+Keygen: 407847 CPU cycles
+Encaps: 778502 CPU cycles
+Decaps: 1221396 CPU cycles
+
++ ./bin/hqc-256-2
+
+Keygen: 429151 CPU cycles
+Encaps: 816734 CPU cycles
+Decaps: 1277781 CPU cycles
+
++ ./bin/hqc-256-3
+
+Keygen: 446273 CPU cycles
+Encaps: 845703 CPU cycles
+Decaps: 1331039 CPU cycles
+
+
+
+
+
+
+
+
